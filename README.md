@@ -90,7 +90,7 @@ configuration.
 $ git clone https://github.com/HelenOS/helenos.git
 $ mkdir -p build/amd64
 $ cd build/amd64
-$ ../../helenos/configure.sh amd64
+$ ../../configure.sh amd64
 ```
 
 Note: If you installed the toolchain to a custom directory, make sure `CROSS_PREFIX`
