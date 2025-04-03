@@ -100,7 +100,7 @@ static void sd_shutdown_complete(void *arg)
 
 	ui_lock(sddlg->ui);
 	(void)ui_label_set_text(sddlg->progress->label,
-	    "Shutdown complete. It is now safe to remove power.");
+	    "It is now safe to turn off your computer.");
 	(void)ui_window_paint(sddlg->progress->window);
 	ui_unlock(sddlg->ui);
 }
@@ -196,6 +196,12 @@ static errno_t shutdown_confirm_create(shutdown_dlg_t *sddlg)
 
 	attr.caption = "Restart";
 	attr.arg = (void *)sd_restart;
+	rc = ui_select_dialog_append(dialog, &attr);
+	if (rc != EOK)
+		goto error;
+
+	attr.caption = "Hibernate";
+	attr.arg = (void *)sd_hibernate;
 	rc = ui_select_dialog_append(dialog, &attr);
 	if (rc != EOK)
 		goto error;
@@ -447,6 +453,9 @@ static errno_t shutdown_start(shutdown_dlg_t *sddlg, sd_action_t action)
 		break;
 	case sd_restart:
 		rc = system_restart(sddlg->system);
+		break;
+	case sd_hibernate:
+		rc = system_poweroff(sddlg->system);
 		break;
 	}
 

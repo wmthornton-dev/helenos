@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2025 Jiri Svoboda
+ * Copyright (c) 2025 Wayne Michael Thornton (WMT) <wmthornton-dev@outlook.com>
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -26,45 +26,28 @@
  * THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-/** @addtogroup hello
+/** @addtogroup date_cfg
  * @{
  */
 /**
- * @file Shutdown dialog
+ * @file Date configuration application (in UI)
  */
 
-#ifndef SHUTDOWN_DLG_H
-#define SHUTDOWN_DLG_H
+#ifndef DATE_CFG_H
+#define DATE_CFG_H
 
-#include <gfx/color.h>
-#include <system.h>
 #include <ui/fixed.h>
 #include <ui/label.h>
 #include <ui/ui.h>
 #include <ui/window.h>
 
-/** Shutdown progress window. */
+/** Date configuration UI application */
 typedef struct {
+	ui_t *ui;
 	ui_window_t *window;
 	ui_fixed_t *fixed;
 	ui_label_t *label;
-} shutdown_progress_t;
-
-/** Shutdown dialog. */
-typedef struct {
-	ui_t *ui;
-	ui_window_t *bgwindow;
-	gfx_color_t *bg_color;
-	shutdown_progress_t *progress;
-	system_t *system;
-} shutdown_dlg_t;
-
-/** Shutdown action */
-typedef enum {
-	sd_poweroff = 1,
-	sd_restart,
-	sd_hibernate
-} sd_action_t;
+} date_cfg_t;
 
 #endif
 
