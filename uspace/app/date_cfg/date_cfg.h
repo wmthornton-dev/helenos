@@ -38,6 +38,7 @@
 
 #include <ui/fixed.h>
 #include <ui/label.h>
+#include <ui/pbutton.h>
 #include <ui/ui.h>
 #include <ui/window.h>
 
@@ -47,6 +48,7 @@ typedef struct {
 	ui_window_t *window;
 	ui_fixed_t *fixed;
 	ui_label_t *label;
+	ui_pbutton_t *ok_button;
 } date_cfg_t;
 
 #endif

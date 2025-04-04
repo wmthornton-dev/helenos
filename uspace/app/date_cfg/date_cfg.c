@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2021 Jiri Svoboda
+ * Copyright (c) 2025 Wayne Michael Thornton (WMT) <wmthornton-dev@outlook.com>
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -37,26 +37,42 @@
 #include <str.h>
 #include <ui/fixed.h>
 #include <ui/label.h>
+#include <ui/pbutton.h>
 #include <ui/resource.h>
 #include <ui/ui.h>
 #include <ui/window.h>
 #include "date_cfg.h"
 
 static void wnd_close(ui_window_t *, void *);
+static void ok_clicked(ui_pbutton_t *, void *);
 
 static ui_window_cb_t window_cb = {
 	.close = wnd_close
 };
 
+static ui_pbutton_cb_t button_cb = {
+	.clicked = ok_clicked
+};
+
 /** Window close button was clicked.
  *
  * @param window Window
- * @param arg Argument (hello)
+ * @param arg Argument (date_cfg)
  */
 static void wnd_close(ui_window_t *window, void *arg)
 {
 	date_cfg_t *date_cfg = (date_cfg_t *) arg;
+	ui_quit(date_cfg->ui);
+}
 
+/** OK button was clicked.
+ *
+ * @param button Button that was clicked
+ * @param arg Argument (date_cfg)
+ */
+static void ok_clicked(ui_pbutton_t *button, void *arg)
+{
+	date_cfg_t *date_cfg = (date_cfg_t *) arg;
 	ui_quit(date_cfg->ui);
 }
 
@@ -79,16 +95,17 @@ static errno_t date_cfg(const char *display_spec)
 
 	ui_wnd_params_init(&params);
 	params.caption = "Date Configuration";
+	params.placement = ui_wnd_place_center;
 	if (ui_is_textmode(ui)) {
 		params.rect.p0.x = 0;
 		params.rect.p0.y = 0;
-		params.rect.p1.x = 24;
-		params.rect.p1.y = 5;
+		params.rect.p1.x = 45;
+		params.rect.p1.y = 15;
 	} else {
 		params.rect.p0.x = 0;
 		params.rect.p0.y = 0;
-		params.rect.p1.x = 200;
-		params.rect.p1.y = 60;
+		params.rect.p1.x = 350; 
+		params.rect.p1.y = 275;  
 	}
 
 	memset((void *) &date_cfg, 0, sizeof(date_cfg));
@@ -111,20 +128,34 @@ static errno_t date_cfg(const char *display_spec)
 		return rc;
 	}
 
-	rc = ui_label_create(ui_res, "Date Configuration", &date_cfg.label);
+	/* Create OK button */
+	rc = ui_pbutton_create(ui_res, "OK", &date_cfg.ok_button);
 	if (rc != EOK) {
-		printf("Error creating label.\n");
+		printf("Error creating OK button.\n");
 		return rc;
 	}
 
-	ui_window_get_app_rect(window, &rect);
-	ui_label_set_rect(date_cfg.label, &rect);
-	ui_label_set_halign(date_cfg.label, gfx_halign_center);
-	ui_label_set_valign(date_cfg.label, gfx_valign_center);
+	ui_pbutton_set_cb(date_cfg.ok_button, &button_cb, (void *) &date_cfg);
 
-	rc = ui_fixed_add(date_cfg.fixed, ui_label_ctl(date_cfg.label));
+	if (ui_is_textmode(ui)) {
+		rect.p0.x = 17;
+		rect.p0.y = 13;
+		rect.p1.x = 28;
+		rect.p1.y = 14;
+	} else {
+		rect.p0.x = 125;
+		rect.p0.y = 235;
+		rect.p1.x = 225;
+		rect.p1.y = rect.p0.y + 28;
+	}
+
+
+	ui_pbutton_set_rect(date_cfg.ok_button, &rect);
+	ui_pbutton_set_default(date_cfg.ok_button, true);  /* Set as default button */
+
+	rc = ui_fixed_add(date_cfg.fixed, ui_pbutton_ctl(date_cfg.ok_button));
 	if (rc != EOK) {
-		printf("Error adding control to layout.\n");
+		printf("Error adding OK button to layout.\n");
 		return rc;
 	}
 
