@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2012 Petr Jerman
+ * Copyright (c) 2025 Jiri Svoboda
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -26,40 +26,52 @@
  * THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-/** @addtogroup sata_bd
+/** @addtogroup nav
  * @{
  */
-/** @file SATA block device driver definitions.
+/**
+ * @file New File dialog
  */
 
-#ifndef __SATA_BD_H__
-#define __SATA_BD_H__
+#ifndef TYPES_DLG_NEWFILEDLG_H
+#define TYPES_DLG_NEWFILEDLG_H
 
-#define SATA_DEV_NAME_LENGTH 256
+#include <errno.h>
+#include <ui/checkbox.h>
+#include <ui/entry.h>
+#include <ui/pbutton.h>
+#include <ui/window.h>
+#include <stdbool.h>
 
-#include <async.h>
-#include <bd_srv.h>
-#include <loc.h>
-#include <stddef.h>
-#include <stdint.h>
+/** New File dialog */
+typedef struct new_file_dlg {
+	/** Dialog window */
+	ui_window_t *window;
+	/** File name text entry */
+	ui_entry_t *ename;
+	/** File size text entry */
+	ui_entry_t *esize;
+	/** Sparse checkbox */
+	ui_checkbox_t *sparse;
+	/** OK button */
+	ui_pbutton_t *bok;
+	/** Cancel button */
+	ui_pbutton_t *bcancel;
+	/** New file dialog callbacks */
+	struct new_file_dlg_cb *cb;
+	/** Callback argument */
+	void *arg;
+} new_file_dlg_t;
 
-/** SATA Block Device. */
-typedef struct {
-	/** Device name in device tree. */
-	char *dev_name;
-	/** SATA Device name. */
-	char sata_dev_name[SATA_DEV_NAME_LENGTH];
-	/** Session to device methods. */
-	async_sess_t *sess;
-	/** Loc service id. */
-	service_id_t service_id;
-	/** Number of blocks. */
-	uint64_t blocks;
-	/** Size of block. */
-	size_t block_size;
-	/** Block device server structure */
-	bd_srvs_t bds;
-} sata_bd_dev_t;
+/** New File dialog callbacks */
+typedef struct new_file_dlg_cb {
+	/** OK button was pressed */
+	void (*bok)(new_file_dlg_t *, void *, const char *, const char *, bool);
+	/** Cancel button was pressed */
+	void (*bcancel)(new_file_dlg_t *, void *);
+	/** Window closure requested (e.g. via close button) */
+	void (*close)(new_file_dlg_t *, void *);
+} new_file_dlg_cb_t;
 
 #endif
 

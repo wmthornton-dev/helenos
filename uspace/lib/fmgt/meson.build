@@ -1,5 +1,5 @@
 #
-# Copyright (c) 2012 Petr Jerman
+# Copyright (c) 2025 Jiri Svoboda
 # All rights reserved.
 #
 # Redistribution and use in source and binary forms, with or without
@@ -26,5 +26,11 @@
 # THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #
 
-deps = [ 'drv' ]
-src = files('sata_bd.c')
+src = files(
+	'src/fmgt.c',
+)
+
+test_src = files(
+	'test/fmgt.c',
+	'test/main.c',
+)

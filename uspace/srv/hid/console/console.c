@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2024 Jiri Svoboda
+ * Copyright (c) 2025 Jiri Svoboda
  * Copyright (c) 2011 Martin Decky
  * All rights reserved.
  *
@@ -489,6 +489,7 @@ static void cons_write_char(console_t *cons, char32_t ch)
 		updated = chargrid_newline(cons->frontbuf);
 		break;
 	case '\r':
+		updated = chargrid_cr(cons->frontbuf);
 		break;
 	case '\t':
 		updated = chargrid_tabstop(cons->frontbuf, 8);
@@ -962,7 +963,7 @@ static bool console_srv_init(char *input_svc, char *output_svc)
 			snprintf(vc, LOC_NAME_MAXLEN, "%s/vc%zu", NAMESPACE, i);
 
 			if (loc_service_register(console_srv, vc,
-			    &consoles[i].dsid) != EOK) {
+			    fallback_port_id, &consoles[i].dsid) != EOK) {
 				printf("%s: Unable to register device %s\n", NAME, vc);
 				return false;
 			}

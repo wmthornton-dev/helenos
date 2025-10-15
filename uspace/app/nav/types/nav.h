@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2021 Jiri Svoboda
+ * Copyright (c) 2025 Jiri Svoboda
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -36,6 +36,8 @@
 #ifndef TYPES_NAV_H
 #define TYPES_NAV_H
 
+#include <fibril.h>
+#include <stdbool.h>
 #include <ui/fixed.h>
 #include <ui/ui.h>
 #include <ui/window.h>
@@ -56,7 +58,23 @@ typedef struct navigator {
 	struct nav_menu *menu;
 	/** Panels */
 	struct panel *panel[navigator_panels];
+	/** Progress dialog */
+	struct progress_dlg *progress_dlg;
+	/** Worker fibril ID */
+	fid_t worker_fid;
+	/** Abort current file management operation */
+	bool abort_op;
 } navigator_t;
+
+/** Navigator worker job */
+typedef struct {
+	/** Navigator */
+	navigator_t *navigator;
+	/** Worker function */
+	void (*wfunc)(void *);
+	/** Worker argument */
+	void *arg;
+} navigator_worker_job_t;
 
 #endif
 
